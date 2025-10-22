@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OKV CARE - Healing Minds. Restoring Hope.</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary-blue: #3E82F7; /* Modern, vivid blue */
+            --light-blue: #D7E3FF; /* Very light blue for subtle accents */
+            --white: #ffffff;
+            --dark-text: #2c3e50;
+            --gray-text: #6c7a89;
+            --light-gray-bg: #f5f7fa;
+            --success-green: #2ecc71;
+            --shadow-subtle: rgba(0, 0, 0, 0.05);
+            --gradient-start: #f0f4f7; /* Very light cool-gray/blue */
+            --gradient-end: #e2ecf7; /* Slightly deeper light blue */
+            --ad-bg: #ffeaa7; /* Soft yellow for Ad space visibility */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: var(--dark-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            gap: 20px;
+            margin: 30px 20px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            background-color: var(--white);
+            box-shadow: 0 8px 25px var(--shadow-subtle);
+            border-radius: 18px;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            color: var(--primary-blue);
+            font-size: 3em;
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+
+        header h2 {
+            font-size: 1.2em;
+            color: var(--gray-text);
+            margin-top: 0;
+            font-weight: 400;
+        }
+
+        blockquote {
+            font-style: italic;
+            color: var(--gray-text);
+            border-left: 5px solid var(--primary-blue);
+            padding-left: 20px;
+            margin: 30px 0;
+            background-color: var(--light-gray-bg);
+            padding: 15px 20px;
+            border-radius: 8px;
+        }
+
+        h3 {
+            color: var(--primary-blue);
+            font-size: 1.6em;
+            margin-top: 30px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--light-blue);
+            font-weight: 700;
+        }
+
+        h4 {
+            color: var(--dark-text);
+            font-size: 1.2em;
+            margin-top: 25px;
+            font-weight: 600;
+        }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid var(--light-gray-bg);
+            gap: 5px;
+        }
+
+        .tab-button {
+            background-color: transparent;
+            border: none;
+            padding: 12px 18px;
+            margin-bottom: -2px; /* Pull up to overlay border */
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--gray-text);
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-button:hover {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--light-blue);
+        }
+
+        .tab-button.active {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        .tab-content {
+            display: none;
+            padding-top: 20px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Quiz Styling */
+        .quiz-questions .question-group {
+            background-color: var(--light-gray-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #e0e6ec;
+        }
+
+        .quiz-questions .question-group p {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        .quiz-questions input[type="radio"] {
+            margin-right: 8px;
+            accent-color: var(--primary-blue);
+        }
+
+        .quiz-questions label {
+            font-weight: 400;
+            color: var(--dark-text);
+        }
+
+        .submit-button {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: block;
+            margin-top: 30px;
+            box-shadow: 0 4px 10px rgba(62, 130, 247, 0.3);
+        }
+
+        .submit-button:hover {
+            background-color: #316dcb;
+            transform: translateY(-2px);
+        }
+
+        /* Output Section */
+        .output-section {
+            background-color: #e6f7ff;
+            border-left: 6px solid var(--primary-blue);
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px var(--shadow-subtle);
+            display: none;
+        }
+
+        .output-section p strong {
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+
+        .output-section ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 15px;
+        }
+
+        .output-section ul li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .output-section ul li::before {
+            content: '👉';
+            color: var(--primary-blue);
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+            line-height: 1;
+        }
+
+        .action-buttons {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .action-button {
+            background-color: var(--success-green);
+            color: var(--white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-button.secondary {
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        .action-button:hover {
+            background-color: #26b963;
+            transform: translateY(-2px);
+        }
+        .action-button.secondary:hover {
+            background-color: #c0d3fa;
+        }
+
+        .ethical-note {
+            background-color: #fff8e1;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 40px;
+            color: #8a6d3b;
+            font-weight: 500;
+        }
+
+        /* ADVERTISEMENT STYLING */
+        .ad-space {
+            background-color: var(--ad-bg);
+            border: 2px dashed #f9a825;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #d89617;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .ad-space.header-ad {
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .ad-space.sidebar-ad {
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 18px; /* Match main content */
+            background-color: #f7e097;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: var(--gray-text);
+            font-size: 0.9em;
+            width: 100%;
+            max-width: 1100px;
+            box-sizing: border-box;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1120px) {
+            .container {
+                flex-direction: column;
+            }
+            .main-content {
+                width: 100%;
+                padding: 30px 25px;
+            }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .ad-space.sidebar-ad {
+                width: 45%;
+                min-height: 150px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2.2em;
+            }
+            .main-content {
+                padding: 20px;
+                margin: 0;
+                border-radius: 0;
+            }
+            .container {
+                margin: 0;
+            }
+            .tab-button {
+                flex-grow: 1;
+                text-align: center;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+            .ad-space.sidebar-ad {
+                width: 100%;
+                min-height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="ad-space header-ad">
+                Large Banner Ad / Sponsor Promotion (970x90)
+            </div>
+
+            <header>
+                <h1>💚 OKV CARE</h1>
+                <h2>Healing Minds. Restoring Hope.</h2>
+                <blockquote>“Helping people understand what they’re feeling — and showing them practical steps toward healing, peace, and purpose.”</blockquote>
+            </header>
+
+            <section class="main-sections">
+                <h3>🩺 Main Sections / Tabs</h3>
+                <div class="tabs">
+                    <button class="tab-button active" onclick="openTab('emotionalHealth')">1️⃣ Health Finder</button>
+                    <button class="tab-button" onclick="openTab('traumaRecovery')">2️⃣ Trauma & Recovery</button>
+                    <button class="tab-button" onclick="openTab('mentalStrength')">3️⃣ Strength Builder</button>
+                    <button class="tab-button" onclick="openTab('professionalHelp')">4️⃣ Pro Help</button>
+                    <button class="tab-button" onclick="openTab('healingLibrary')">5️⃣ Library</button>
+                </div>
+
+                <div id="emotionalHealth" class="tab-content active">
+                    <h4>🧠 Emotional Health Finder</h4>
+                    <p>For anyone feeling lost, down, or emotionally heavy. Complete the quiz below.</p>
+                    <div class="quiz-questions">
+                        <div class="question-group">
+                            <p>1. How have you been feeling lately?</p>
+                            <div class="option-group"><input type="radio" name="q1_ehf" value="sad"><label> Sad or empty</label></div>
+                            <div class="option-group"><input type="radio" name="q1_ehf" value="anxious"><label> Anxious or restless</label></div>
+                            <div class="option-group"><input type="radio" name="q1_ehf" value="numb"><label> Numb or disconnected</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>2. How long have you felt this way?</p>
+                            <div class="option-group"><input type="radio" name="q2_ehf" value="weeks"><label> A few weeks</label></div>
+                            <div class="option-group"><input type="radio" name="q2_ehf" value="months"><label> Several months</label></div>
+                            <div class="option-group"><input type="radio" name="q2_ehf" value="long_time"><label> A long time</label></div>
+                        </div>
+                        <button class="submit-button" onclick="generateEmotionalHealthOutput()">Get My Emotional Insight</button>
+                    </div>
+
+                    <div id="emotionalHealthOutput" class="output-section">
+                        <p>✅ <strong>Emotional Insight:</strong> You may be dealing with emotional burnout or mild depression.</p>
+                        <p>💬 <strong>Encouragement:</strong> You are not alone. What you feel is valid. Healing takes time.</p>
+                        <p>💡 <strong>Suggested Actions:</strong></p>
+                        <ul>
+                            <li>Take short daily walks and stay connected with a trusted person.</li>
+                            <li>Try journaling your feelings (2–3 sentences each morning).</li>
+                            <li>If it persists, talk to a counselor or trained mentor.</li>
+                            <li>📖 Optional Faith Tip: “Cast all your care upon Him, for He cares for you.” – 1 Peter 5:7</li>
+                        </ul>
+                        <div class="action-buttons">
+                            <a href="#" class="action-button"><span style="font-size: 1.2em;">⬇️</span> Download My Emotional Plan (PDF)</a>
+                            <a href="#" class="action-button secondary"><span style="font-size: 1.2em;">🤝</span> Join OKV Healing Community</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="traumaRecovery" class="tab-content">
+                    <h4>🧠 Trauma & Recovery Tab</h4>
+                    <p>For people healing from *abuse, rejection, loss, heartbreak, or childhood pain.*</p>
+                    <div class="quiz-questions">
+                        <div class="question-group">
+                            <p>1. Do you often think about a painful past event?</p>
+                            <div class="option-group"><input type="radio" name="q1_tr" value="yes"><label> Yes</label></div>
+                            <div class="option-group"><input type="radio" name="q1_tr" value="no"><label> No</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>3. Have you forgiven those involved (or yourself)?</p>
+                            <div class="option-group"><input type="radio" name="q3_tr" value="working_on_it"><label> Working on it</label></div>
+                            <div class="option-group"><input type="radio" name="q3_tr" value="no"><label> No</label></div>
+                        </div>
+                        <button class="submit-button" onclick="generateTraumaRecoveryOutput()">Get My Recovery Plan</button>
+                    </div>
+                    
+                    <div id="traumaRecoveryOutput" class="output-section">
+                        <p>✅ <strong>Identified Need:</strong> Emotional trauma recovery.</p>
+                        <p>💡 <strong>Recommended Healing Plan:</strong></p>
+                        <ul>
+                            <li>Start with gentle forgiveness exercises.</li>
+                            <li>Write a letter to your younger self — release what you’ve carried.</li>
+                            <li>Consider faith-based or professional counseling.</li>
+                            <li>📚 *Free Resource:* “Healing from Emotional Trauma – PDF Guide.”</li>
+                        </ul>
+                        <div class="action-buttons">
+                            <a href="#" class="action-button"><span style="font-size: 1.2em;">⬇️</span> Download My Recovery Guide (PDF)</a>
+                            <a href="#" class="action-button secondary"><span style="font-size: 1.2em;">💚</span> Join Trauma Healing Group</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="mentalStrength" class="tab-content">
+                    <h4>🧠 Mental Strength Builder</h4>
+                    <p>Focus: Build positive habits, gratitude, and mindset for long-term wellness.</p>
+                    <div class="quiz-questions">
+                        <div class="question-group">
+                            <p>1. How often do you practice gratitude?</p>
+                            <div class="option-group"><input type="radio" name="q1_msb" value="daily"><label> Daily</label></div>
+                            <div class="option-group"><input type="radio" name="q1_msb" value="rarely"><label> Rarely</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>2. Do you have a spiritual or mindfulness routine?</p>
+                            <div class="option-group"><input type="radio" name="q4_msb" value="yes_daily"><label> Yes, daily</label></div>
+                            <div class="option-group"><input type="radio" name="q4_msb" value="no"><label> No</label></div>
+                        </div>
+                        <button class="submit-button" onclick="generateMentalStrengthOutput()">Get My Growth Plan</button>
+                    </div>
+
+                    <div id="mentalStrengthOutput" class="output-section">
+                        <p>✅ <strong>Recommendation:</strong> Build Resilience Routine</p>
+                        <p>💡 <strong>Daily Habits:</strong></p>
+                        <ul>
+                            <li>Gratitude journaling (3 things daily)</li>
+                            <li>10-min reflection/prayer</li>
+                            <li>Limit negative media</li>
+                            <li>🎧 *Music Therapy:* Calm Piano or Lo-fi Gospel playlist</li>
+                        </ul>
+                        <div class="action-buttons">
+                            <a href="#" class="action-button"><span style="font-size: 1.2em;">⬇️</span> Download My Growth Plan (PDF)</a>
+                            <a href="#" class="action-button secondary"><span style="font-size: 1.2em;">💪</span> Join Resilience Hub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="professionalHelp" class="tab-content">
+                    <h4>4️⃣ Professional Help Tab</h4>
+                    <p>💬 “Sometimes the best healing step is to talk with someone trained to help.”</p>
+                    <div class="professional-help-links">
+                        <ul>
+                            <li><span style="font-size: 1.2em; margin-right: 5px;">🧠</span> <strong>Certified counselors / therapists:</strong> <a href="#">Find a partner therapist near you</a></li>
+                            <li><span style="font-size: 1.2em; margin-right: 5px;">☎️</span> <strong>Crisis helplines:</strong> <a href="#">Find local crisis hotlines</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="healingLibrary" class="tab-content">
+                    <h4>5️⃣ OKV Healing Library</h4>
+                    <p>Free resources section:</p>
+                    <div class="healing-library">
+                        <ul>
+                            <li><strong>📘 Mental health articles:</strong> <a href="#">Read "Understanding Depression"</a></li>
+                            <li><strong>🎧 Guided meditation:</strong> <a href="#">Listen to "Calm & Centered Meditation"</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <section class="ethical-note">
+                    <h3>⚠ Important Ethical Note</h3>
+                    <p><strong>Disclaimer:</strong> This tool does not replace professional therapy or medical advice. It is a support and guidance platform.</p>
+                    <ul>
+                        <li>Encourage contacting professional counselors if symptoms are severe.</li>
+                    </ul>
+                </section>
+            </section>
+        </div>
+
+        <div class="sidebar">
+            <div class="ad-space sidebar-ad">
+                Sidebar Ad / Tool Promotion (300x250)
+            </div>
+            <div class="ad-space sidebar-ad">
+                Sidebar Ad / Community Link (300x250)
+            </div>
+            
+            <section style="background-color: var(--white); border-radius: 18px; padding: 20px; box-shadow: 0 4px 15px var(--shadow-subtle);">
+                <h4 style="color: var(--primary-blue); margin-top: 0; border-bottom: 1px solid var(--light-blue); padding-bottom: 10px;">🌍 OKV CARE Community</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 10px;">💬 <a href="#" style="color: var(--dark-text); font-weight: 600;">Emotional Support Group</a></li>
+                    <li style="margin-bottom: 10px;">🕊 <a href="#" style="color: var(--dark-text); font-weight: 600;">Faith Healing Circle</a></li>
+                    <li style="margin-bottom: 10px;">🧩 <a href="#" style="color: var(--dark-text); font-weight: 600;">Growth & Mindset Hub</a></li>
+                </ul>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <div class="ad-space" style="margin-bottom: 20px;">
+            Footer Banner Ad (Full Width)
+        </div>
+        <p>&copy; 2023 OKV CARE. All rights reserved. Your journey to healing starts here.</p>
+    </footer>
+
+    <script>
+        function openTab(tabId) {
+            // Deactivate all tab buttons and hide all tab content
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Activate the clicked tab button and show its content
+            document.querySelector(`.tab-button[onclick="openTab('${tabId}')"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Functions to display quiz output (simulated logic)
+        function generateEmotionalHealthOutput() {
+            document.getElementById('emotionalHealthOutput').style.display = 'block';
+            document.getElementById('emotionalHealthOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function generateTraumaRecoveryOutput() {
+            document.getElementById('traumaRecoveryOutput').style.display = 'block';
+            document.getElementById('traumaRecoveryOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function generateMentalStrengthOutput() {
+            document.getElementById('mentalStrengthOutput').style.display = 'block';
+            document.getElementById('mentalStrengthOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Initialize the first tab as active when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            openTab('emotionalHealth');
+        });
+    </script>
+</body>
+</html>
