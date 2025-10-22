@@ -394,20 +394,46 @@
                 </div>
 
                 <div id="emotionalHealth" class="tab-content active">
-                    <h4>🧠 Emotional Health Finder</h4>
+                    <h4>🧠 Emotional Health Finder - Deeper Insights</h4>
                     <p>For anyone feeling lost, down, or emotionally heavy. Complete the quiz below.</p>
                     <div class="quiz-questions">
                         <div class="question-group">
                             <p>1. How have you been feeling lately?</p>
                             <div class="option-group"><input type="radio" name="q1_ehf" value="sad"><label> Sad or empty</label></div>
                             <div class="option-group"><input type="radio" name="q1_ehf" value="anxious"><label> Anxious or restless</label></div>
+                            <div class="option-group"><input type="radio" name="q1_ehf" value="angry"><label> Angry or easily irritated</label></div>
                             <div class="option-group"><input type="radio" name="q1_ehf" value="numb"><label> Numb or disconnected</label></div>
+                            <div class="option-group"><input type="radio" name="q1_ehf" value="hopeless"><label> Hopeless or overwhelmed</label></div>
                         </div>
                         <div class="question-group">
-                            <p>2. How long have you felt this way?</p>
-                            <div class="option-group"><input type="radio" name="q2_ehf" value="weeks"><label> A few weeks</label></div>
+                            <p>2. How long have these feelings primarily affected you?</p>
+                            <div class="option-group"><input type="radio" name="q2_ehf" value="days"><label> A few days or weeks</label></div>
                             <div class="option-group"><input type="radio" name="q2_ehf" value="months"><label> Several months</label></div>
-                            <div class="option-group"><input type="radio" name="q2_ehf" value="long_time"><label> A long time</label></div>
+                            <div class="option-group"><input type="radio" name="q2_ehf" value="long_time"><label> A year or longer</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>3. How significantly is this affecting your daily functioning (work/sleep/school)?</p>
+                            <div class="option-group"><input type="radio" name="q3_ehf" value="low"><label> Slightly, I can still manage most things</label></div>
+                            <div class="option-group"><input type="radio" name="q3_ehf" value="moderate"><label> Moderately, it's hard to focus and I miss things</label></div>
+                            <div class="option-group"><input type="radio" name="q3_ehf" value="severe"><label> Severely, I struggle to get out of bed or function</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>4. When you feel down, what is your primary coping mechanism?</p>
+                            <div class="option-group"><input type="radio" name="q4_ehf" value="socialize"><label> Seeking connection/talking to people</label></div>
+                            <div class="option-group"><input type="radio" name="q4_ehf" value="withdraw"><label> Withdrawing/being alone</label></div>
+                            <div class="option-group"><input type="radio" name="q4_ehf" value="distraction"><label> Using media/substances for distraction</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>5. Do you feel a sense of purpose or meaning in your current life?</p>
+                            <div class="option-group"><input type="radio" name="q5_ehf" value="yes"><label> Yes, I feel motivated and hopeful</label></div>
+                            <div class="option-group"><input type="radio" name="q5_ehf" value="sometimes"><label> Sometimes, but I often feel lost</label></div>
+                            <div class="option-group"><input type="radio" name="q5_ehf" value="no"><label> No, I feel disconnected from my purpose</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>6. Do you have someone you trust to talk to about deeper emotional issues?</p>
+                            <div class="option-group"><input type="radio" name="q6_ehf" value="yes"><label> Yes, I have strong support</label></div>
+                            <div class="option-group"><input type="radio" name="q6_ehf" value="limited"><label> Only a few people, but I don't share much</label></div>
+                            <div class="option-group"><input type="radio" name="q6_ehf" value="no"><label> No trusted person at all</label></div>
                         </div>
                         <button class="submit-button" onclick="generateEmotionalHealthOutput()">Get My Emotional Insight</button>
                     </div>
@@ -430,22 +456,46 @@
                 </div>
 
                 <div id="traumaRecovery" class="tab-content">
-                    <h4>🧠 Trauma & Recovery Tab</h4>
+                    <h4>🧠 Trauma & Recovery Tab - Deeper Insights</h4>
                     <p>For people healing from *abuse, rejection, loss, heartbreak, or childhood pain.*</p>
                     <div class="quiz-questions">
                         <div class="question-group">
-                            <p>1. Do you often think about a painful past event?</p>
-                            <div class="option-group"><input type="radio" name="q1_tr" value="yes"><label> Yes</label></div>
-                            <div class="option-group"><input type="radio" name="q1_tr" value="no"><label> No</label></div>
+                            <p>1. Do you often think about a painful past event, and does it feel like it happened recently?</p>
+                            <div class="option-group"><input type="radio" name="q1_tr" value="yes_frequent"><label> Yes, frequently (re-experiencing/flashbacks)</label></div>
+                            <div class="option-group"><input type="radio" name="q1_tr" value="sometimes"><label> Sometimes, but I can usually control the thoughts</label></div>
+                            <div class="option-group"><input type="radio" name="q1_tr" value="rarely"><label> Rarely, it is mostly in the past</label></div>
                         </div>
                         <div class="question-group">
-                            <p>3. Have you forgiven those involved (or yourself)?</p>
-                            <div class="option-group"><input type="radio" name="q3_tr" value="working_on_it"><label> Working on it</label></div>
-                            <div class="option-group"><input type="radio" name="q3_tr" value="no"><label> No</label></div>
+                            <p>2. Does the trauma affect your sleep or cause you to feel constantly "on guard" (hyper-vigilance)?</p>
+                            <div class="option-group"><input type="radio" name="q2_tr" value="yes"><label> Yes, I often have trouble sleeping and am easily startled</label></div>
+                            <div class="option-group"><input type="radio" name="q2_tr" value="no"><label> No, I generally sleep well and feel safe</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>3. Do you find yourself avoiding people, places, or activities that remind you of the past event?</p>
+                            <div class="option-group"><input type="radio" name="q3_tr" value="yes_often"><label> Yes, I actively avoid many things</label></div>
+                            <div class="option-group"><input type="radio" name="q3_tr" value="sometimes"><label> Sometimes, but I try to push past it</label></div>
+                            <div class="option-group"><input type="radio" name="q3_tr" value="no"><label> No, I face things directly</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>4. Do you believe you are intrinsically flawed or responsible for what happened (guilt/shame)?</p>
+                            <div class="option-group"><input type="radio" name="q4_tr" value="yes"><label> Yes, I carry a lot of guilt/shame</label></div>
+                            <div class="option-group"><input type="radio" name="q4_tr" value="sometimes"><label> Sometimes, but my rational mind knows better</label></div>
+                            <div class="option-group"><input type="radio" name="q4_tr" value="no"><label> No, I know the fault was not mine</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>5. Have you seriously considered talking to a trauma-informed professional?</p>
+                            <div class="option-group"><input type="radio" name="q5_tr" value="yes_tried"><label> Yes, I have tried or am currently in therapy</label></div>
+                            <div class="option-group"><input type="radio" name="q5_tr" value="yes_need"><label> Yes, I know I need to but haven't started</label></div>
+                            <div class="option-group"><input type="radio" name="q5_tr" value="no_prefer_self"><label> No, I prefer to manage it myself</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>6. Do you find it difficult to maintain close, trusting relationships since the event?</p>
+                            <div class="option-group"><input type="radio" name="q6_tr" value="yes"><label> Yes, I struggle to trust or let people in</label></div>
+                            <div class="option-group"><input type="radio" name="q6_tr" value="no"><label> No, my relationships are generally healthy</label></div>
                         </div>
                         <button class="submit-button" onclick="generateTraumaRecoveryOutput()">Get My Recovery Plan</button>
                     </div>
-                    
+
                     <div id="traumaRecoveryOutput" class="output-section">
                         <p>✅ <strong>Identified Need:</strong> Emotional trauma recovery.</p>
                         <p>💡 <strong>Recommended Healing Plan:</strong></p>
@@ -461,20 +511,46 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div id="mentalStrength" class="tab-content">
-                    <h4>🧠 Mental Strength Builder</h4>
+                    <h4>🧠 Mental Strength Builder - Deeper Insights</h4>
                     <p>Focus: Build positive habits, gratitude, and mindset for long-term wellness.</p>
                     <div class="quiz-questions">
                         <div class="question-group">
-                            <p>1. How often do you practice gratitude?</p>
-                            <div class="option-group"><input type="radio" name="q1_msb" value="daily"><label> Daily</label></div>
-                            <div class="option-group"><input type="radio" name="q1_msb" value="rarely"><label> Rarely</label></div>
+                            <p>1. How often do you practice gratitude or intentionally celebrate a small win?</p>
+                            <div class="option-group"><input type="radio" name="q1_msb" value="daily"><label> Daily/Multiple times a week</label></div>
+                            <div class="option-group"><input type="radio" name="q1_msb" value="weekly"><label> Weekly or less</label></div>
+                            <div class="option-group"><input type="radio" name="q1_msb" value="never"><label> Rarely or never</label></div>
                         </div>
                         <div class="question-group">
-                            <p>2. Do you have a spiritual or mindfulness routine?</p>
-                            <div class="option-group"><input type="radio" name="q4_msb" value="yes_daily"><label> Yes, daily</label></div>
-                            <div class="option-group"><input type="radio" name="q4_msb" value="no"><label> No</label></div>
+                            <p>2. How do you primarily respond when you encounter a significant setback or failure?</p>
+                            <div class="option-group"><input type="radio" name="q2_msb" value="resilient"><label> I see it as a lesson and try again quickly</label></div>
+                            <div class="option-group"><input type="radio" name="q2_msb" value="discouraged"><label> I get discouraged and sometimes give up</label></div>
+                            <div class="option-group"><input type="radio" name="q2_msb" value="self_blame"><label> I engage in a lot of negative self-talk</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>3. Do you have clearly defined daily or weekly goals (for wellness, work, or spirit)?</p>
+                            <div class="option-group"><input type="radio" name="q3_msb" value="yes_consistent"><label> Yes, I am consistent with planning</label></div>
+                            <div class="option-group"><input type="radio" name="q3_msb" value="sometimes"><label> Sometimes, but I struggle with follow-through</label></div>
+                            <div class="option-group"><input type="radio" name="q3_msb" value="no"><label> No, I mostly just try to survive the day</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>4. How often do you engage in a spiritual or mindfulness routine (prayer, meditation, nature)?</p>
+                            <div class="option-group"><input type="radio" name="q4_msb" value="daily"><label> Daily (10+ minutes)</label></div>
+                            <div class="option-group"><input type="radio" name="q4_msb" value="sometimes"><label> Sometimes, but not consistently</label></div>
+                            <div class="option-group"><input type="radio" name="q4_msb" value="no"><label> Rarely or never</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>5. How would you rate your ability to say "No" to non-essential commitments?</p>
+                            <div class="option-group"><input type="radio" name="q5_msb" value="strong"><label> Strong, I set healthy boundaries</label></div>
+                            <div class="option-group"><input type="radio" name="q5_msb" value="struggle"><label> I struggle, I often over-commit</label></div>
+                            <div class="option-group"><input type="radio" name="q5_msb" value="always_yes"><label> I almost always say yes, leading to burnout</label></div>
+                        </div>
+                        <div class="question-group">
+                            <p>6. Do you prioritize time for creative outlets, hobbies, or things that purely bring you joy?</p>
+                            <div class="option-group"><input type="radio" name="q6_msb" value="yes_regularly"><label> Yes, it's a regular part of my week</label></div>
+                            <div class="option-group"><input type="radio" name="q6_msb" value="rarely"><label> Rarely, I feel too busy for hobbies</label></div>
+                            <div class="option-group"><input type="radio" name="q6_msb" value="never"><label> Never, I've forgotten what I enjoy</label></div>
                         </div>
                         <button class="submit-button" onclick="generateMentalStrengthOutput()">Get My Growth Plan</button>
                     </div>
