@@ -240,6 +240,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
+            align-items: center; /* Vertically align items */
         }
 
         .action-button {
@@ -262,6 +263,14 @@
             background-color: var(--light-blue);
             color: var(--primary-blue);
         }
+        
+        .action-button.retake-quiz {
+            background-color: transparent;
+            color: var(--gray-text);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--light-blue);
+        }
 
         .action-button:hover {
             background-color: #26b963;
@@ -270,6 +279,12 @@
         .action-button.secondary:hover {
             background-color: #c0d3fa;
         }
+        .action-button.retake-quiz:hover {
+            background-color: var(--light-gray-bg);
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
 
         .ethical-note {
             background-color: #fff8e1;
@@ -451,6 +466,7 @@
                         <div class="action-buttons">
                             <a href="#" class="action-button"><span style="font-size: 1.2em;">⬇️</span> Download My Emotional Plan (PDF)</a>
                             <a href="#" class="action-button secondary"><span style="font-size: 1.2em;">🤝</span> Join OKV Healing Community</a>
+                            <button class="action-button retake-quiz" onclick="retakeQuiz('ehf')"><span style="font-size: 1.2em; margin-right: 5px;">🔄</span> Retake Quiz</button>
                         </div>
                     </div>
                 </div>
@@ -509,6 +525,7 @@
                         <div class="action-buttons">
                             <a href="#" class="action-button"><span style="font-size: 1.2em;">⬇️</span> Download My Recovery Guide (PDF)</a>
                             <a href="#" class="action-button secondary"><span style="font-size: 1.2em;">💚</span> Join Trauma Healing Group</a>
+                            <button class="action-button retake-quiz" onclick="retakeQuiz('tr')"><span style="font-size: 1.2em; margin-right: 5px;">🔄</span> Retake Quiz</button>
                         </div>
                     </div>
                 </div>
@@ -568,6 +585,7 @@
                         <div class="action-buttons">
                             <a href="#" class="action-button"><span style="font-size: 1.2em;">⬇️</span> Download My Growth Plan (PDF)</a>
                             <a href="#" class="action-button secondary"><span style="font-size: 1.2em;">💪</span> Join Resilience Hub</a>
+                            <button class="action-button retake-quiz" onclick="retakeQuiz('msb')"><span style="font-size: 1.2em; margin-right: 5px;">🔄</span> Retake Quiz</button>
                         </div>
                     </div>
                 </div>
@@ -656,6 +674,41 @@
             document.getElementById(tabId).classList.add('active');
         }
 
+        /**
+         * Resets the quiz for a given prefix (e.g., 'ehf', 'tr', 'msb').
+         * Hides the output and clears radio button selections.
+         */
+        function retakeQuiz(prefix) {
+            let outputId;
+            let formElement;
+            
+            if (prefix === 'ehf') {
+                outputId = 'emotionalHealthOutput';
+                formElement = document.getElementById('emotionalHealth').querySelector('.quiz-questions');
+            } else if (prefix === 'tr') {
+                outputId = 'traumaRecoveryOutput';
+                formElement = document.getElementById('traumaRecovery').querySelector('.quiz-questions');
+            } else if (prefix === 'msb') {
+                outputId = 'mentalStrengthOutput';
+                formElement = document.getElementById('mentalStrength').querySelector('.quiz-questions');
+            } else {
+                return; // Safety break
+            }
+
+            // 1. Hide the output section
+            document.getElementById(outputId).style.display = 'none';
+
+            // 2. Uncheck all radio buttons in the quiz section
+            const radios = formElement.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // 3. Scroll back to the top of the quiz section
+            formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+
         // --- CUSTOM LOGIC FOR EMOTIONAL HEALTH FINDER ---
         function generateEmotionalHealthOutput() {
             const emotion = getRadioValue('q1_ehf');
@@ -673,6 +726,7 @@
                 actions = ["Complete the quiz fully to receive your personalized plan.", "Remember, all your answers are private and anonymous."];
                 document.getElementById('ehf-insight').innerHTML = insight;
                 document.getElementById('ehf-actions').innerHTML = actions.map(a => `<li>${a}</li>`).join('');
+                document.getElementById('ehf-faith-tip').innerHTML = ''; // Clear faith tip on error
                 document.getElementById('emotionalHealthOutput').style.display = 'block';
                 document.getElementById('emotionalHealthOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 return;
