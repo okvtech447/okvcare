@@ -378,7 +378,7 @@
             </div>
 
             <header>
-                <h1>OKV CARE</h1>
+                <h1>💚 OKV CARE</h1>
                 <h2>Healing Minds. Restoring Hope.</h2>
                 <blockquote>“Helping people understand what they’re feeling — and showing them practical steps toward healing, peace, and purpose.”</blockquote>
             </header>
@@ -398,7 +398,7 @@
                     <p>For anyone feeling lost, down, or emotionally heavy. Complete the quiz below.</p>
                     <div class="quiz-questions">
                         <div class="question-group">
-                            <p>1. How have you been feeling lately?</p>
+                            <p>1. How have you been feeling lately? (Primary Emotion)</p>
                             <div class="option-group"><input type="radio" name="q1_ehf" value="sad"><label> Sad or empty</label></div>
                             <div class="option-group"><input type="radio" name="q1_ehf" value="anxious"><label> Anxious or restless</label></div>
                             <div class="option-group"><input type="radio" name="q1_ehf" value="angry"><label> Angry or easily irritated</label></div>
@@ -439,15 +439,15 @@
                     </div>
 
                     <div id="emotionalHealthOutput" class="output-section">
-                        <p>✅ <strong>Emotional Insight:</strong> You may be dealing with emotional burnout or mild depression.</p>
-                        <p>💬 <strong>Encouragement:</strong> You are not alone. What you feel is valid. Healing takes time.</p>
+                        <p id="ehf-insight">✅ <strong>Emotional Insight:</strong> Analyzing your responses...</p>
+                        <p id="ehf-encouragement">💬 <strong>Encouragement:</strong> What you feel is valid. Healing takes time — and it starts with one step.</p>
                         <p>💡 <strong>Suggested Actions:</strong></p>
-                        <ul>
-                            <li>Take short daily walks and stay connected with a trusted person.</li>
-                            <li>Try journaling your feelings (2–3 sentences each morning).</li>
-                            <li>If it persists, talk to a counselor or trained mentor.</li>
-                            <li>📖 Optional Faith Tip: “Cast all your care upon Him, for He cares for you.” – 1 Peter 5:7</li>
+                        <ul id="ehf-actions">
+                            <li>Placeholder action 1.</li>
+                            <li>Placeholder action 2.</li>
+                            <li>If symptoms are severe or long-lasting, please seek professional help immediately.</li>
                         </ul>
+                        <p id="ehf-faith-tip"></p>
                         <div class="action-buttons">
                             <a href="#" class="action-button"><span style="font-size: 1.2em;">⬇️</span> Download My Emotional Plan (PDF)</a>
                             <a href="#" class="action-button secondary"><span style="font-size: 1.2em;">🤝</span> Join OKV Healing Community</a>
@@ -502,6 +502,7 @@
                         <ul>
                             <li>Start with gentle forgiveness exercises.</li>
                             <li>Write a letter to your younger self — release what you’ve carried.</li>
+                            <li>Practice breathing & mindfulness for 10 mins daily.</li>
                             <li>Consider faith-based or professional counseling.</li>
                             <li>📚 *Free Resource:* “Healing from Emotional Trauma – PDF Guide.”</li>
                         </ul>
@@ -630,6 +631,17 @@
     </footer>
 
     <script>
+        // Helper function to get the value of a selected radio button group
+        function getRadioValue(name) {
+            const radios = document.getElementsByName(name);
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    return radios[i].value;
+                }
+            }
+            return null;
+        }
+
         function openTab(tabId) {
             // Deactivate all tab buttons and hide all tab content
             document.querySelectorAll('.tab-button').forEach(button => {
@@ -644,12 +656,90 @@
             document.getElementById(tabId).classList.add('active');
         }
 
-        // Functions to display quiz output (simulated logic)
+        // --- CUSTOM LOGIC FOR EMOTIONAL HEALTH FINDER ---
         function generateEmotionalHealthOutput() {
+            const emotion = getRadioValue('q1_ehf');
+            const duration = getRadioValue('q2_ehf');
+            const severity = getRadioValue('q3_ehf');
+            const support = getRadioValue('q6_ehf');
+
+            let insight = "✅ <strong>Emotional Insight:</strong> ";
+            let actions = [];
+            let faithTip = '';
+
+            // 1. Determine Insight based on Emotion and Duration/Severity
+            if (!emotion || !duration || !severity || !support) {
+                insight = "❌ <strong>Incomplete:</strong> Please answer all questions to get a customized insight.";
+                actions = ["Complete the quiz fully to receive your personalized plan.", "Remember, all your answers are private and anonymous."];
+                document.getElementById('ehf-insight').innerHTML = insight;
+                document.getElementById('ehf-actions').innerHTML = actions.map(a => `<li>${a}</li>`).join('');
+                document.getElementById('emotionalHealthOutput').style.display = 'block';
+                document.getElementById('emotionalHealthOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return;
+            }
+
+            // --- INSIGHT LOGIC ---
+            if (emotion === 'sad' || emotion === 'hopeless') {
+                insight += (duration === 'long_time' || severity === 'severe') ? "You are displaying signs of **moderate to significant depression**. It is crucial to address this." : "You may be experiencing **emotional burnout or sadness**. This is common, but needs attention.";
+            } else if (emotion === 'anxious') {
+                insight += (duration === 'long_time' || severity === 'severe') ? "Your answers suggest signs of **chronic anxiety or high stress levels**. You need structured relaxation and support." : "You are dealing with **acute anxiety**. Focus on grounding and stability exercises.";
+            } else if (emotion === 'angry' || emotion === 'numb') {
+                insight += "You may be processing **unresolved resentment or trauma** through anger or emotional detachment. Focus on emotional release and safety.";
+            } else {
+                insight += "Your feelings indicate a general state of **overwhelm and low self-worth**. We recommend building foundational mental strength.";
+            }
+
+            // --- ACTION LOGIC ---
+            // Base Actions
+            actions.push("Practice **mindful breathing** or a 5-minute devotion twice daily to recenter.");
+            
+            // Action based on Emotion
+            if (emotion === 'sad' || emotion === 'hopeless') {
+                actions.push("Start a **Gratitude Journal** (3 things every night) to shift focus.");
+            } else if (emotion === 'anxious') {
+                actions.push("Try a **Body Scan meditation** to reduce physical tension from anxiety.");
+            } else if (emotion === 'angry' || emotion === 'numb') {
+                actions.push("Write a **'Release Letter'** to externalize and process stored emotions.");
+            }
+
+            // Action based on Support System (Q6)
+            if (support === 'no') {
+                actions.push("Prioritize finding a **trusted mentor or counselor** (see Professional Help tab) — you don't have to carry this alone.");
+            } else if (support === 'limited') {
+                actions.push("Commit to sharing **one honest feeling** this week with your trusted person to strengthen your support.");
+            } else {
+                actions.push("Reach out to your strong support system today to share your quiz results.");
+            }
+
+            // Action based on Severity/Duration (Q2/Q3)
+            if (severity === 'severe' || duration === 'long_time') {
+                 actions.push("CRITICAL: **Contact a professional therapist or helpline today.** This level of distress requires expert guidance. See the Pro Help tab.");
+            } else {
+                actions.push("Aim for **30 minutes of light exercise** (walking or stretching) daily, which has powerful mood benefits.");
+            }
+
+            // --- FAITH TIP ---
+            if (emotion === 'anxious') {
+                faithTip = '📖 Optional Faith Tip: "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God." – Philippians 4:6';
+            } else if (emotion === 'hopeless') {
+                faithTip = '📖 Optional Faith Tip: "For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future." – Jeremiah 29:11';
+            } else {
+                faithTip = '📖 Optional Faith Tip: “Cast all your care upon Him, for He cares for you.” – 1 Peter 5:7';
+            }
+
+            // 2. Update the HTML output
+            document.getElementById('ehf-insight').innerHTML = insight;
+            document.getElementById('ehf-actions').innerHTML = actions.map(a => `<li>${a}</li>`).join('');
+            document.getElementById('ehf-faith-tip').innerHTML = faithTip;
+
+            // 3. Display and Scroll
             document.getElementById('emotionalHealthOutput').style.display = 'block';
             document.getElementById('emotionalHealthOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+        // --- END CUSTOM LOGIC FOR EMOTIONAL HEALTH FINDER ---
 
+
+        // Functions for other sections (currently using default output)
         function generateTraumaRecoveryOutput() {
             document.getElementById('traumaRecoveryOutput').style.display = 'block';
             document.getElementById('traumaRecoveryOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
