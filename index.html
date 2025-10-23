@@ -476,13 +476,13 @@
                     <p>For people healing from *abuse, rejection, loss, heartbreak, or childhood pain.*</p>
                     <div class="quiz-questions">
                         <div class="question-group">
-                            <p>1. Do you often think about a painful past event, and does it feel like it happened recently?</p>
-                            <div class="option-group"><input type="radio" name="q1_tr" value="yes_frequent"><label> Yes, frequently (re-experiencing/flashbacks)</label></div>
+                            <p>1. Do you often think about a painful past event, and does it feel like it happened recently? (Re-experiencing)</p>
+                            <div class="option-group"><input type="radio" name="q1_tr" value="yes_frequent"><label> Yes, frequently (flashbacks, nightmares)</label></div>
                             <div class="option-group"><input type="radio" name="q1_tr" value="sometimes"><label> Sometimes, but I can usually control the thoughts</label></div>
                             <div class="option-group"><input type="radio" name="q1_tr" value="rarely"><label> Rarely, it is mostly in the past</label></div>
                         </div>
                         <div class="question-group">
-                            <p>2. Does the trauma affect your sleep or cause you to feel constantly "on guard" (hyper-vigilance)?</p>
+                            <p>2. Does the trauma affect your sleep or cause you to feel constantly "on guard"? (Hyper-vigilance)</p>
                             <div class="option-group"><input type="radio" name="q2_tr" value="yes"><label> Yes, I often have trouble sleeping and am easily startled</label></div>
                             <div class="option-group"><input type="radio" name="q2_tr" value="no"><label> No, I generally sleep well and feel safe</label></div>
                         </div>
@@ -493,7 +493,7 @@
                             <div class="option-group"><input type="radio" name="q3_tr" value="no"><label> No, I face things directly</label></div>
                         </div>
                         <div class="question-group">
-                            <p>4. Do you believe you are intrinsically flawed or responsible for what happened (guilt/shame)?</p>
+                            <p>4. Do you believe you are intrinsically flawed or responsible for what happened? (Guilt/Shame)</p>
                             <div class="option-group"><input type="radio" name="q4_tr" value="yes"><label> Yes, I carry a lot of guilt/shame</label></div>
                             <div class="option-group"><input type="radio" name="q4_tr" value="sometimes"><label> Sometimes, but my rational mind knows better</label></div>
                             <div class="option-group"><input type="radio" name="q4_tr" value="no"><label> No, I know the fault was not mine</label></div>
@@ -675,7 +675,6 @@
 
         /**
          * Resets the quiz for a given prefix (e.g., 'ehf', 'tr', 'msb').
-         * Hides the output and clears radio button selections.
          */
         function retakeQuiz(prefix) {
             let outputId;
@@ -706,67 +705,92 @@
             // 3. Scroll back to the top of the quiz section
             formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+        
+        // --- CENTRAL VALIDATION FUNCTION ---
+        function validateQuiz(quizPrefix, outputId) {
+            const formElement = document.getElementById(outputId).closest('.tab-content').querySelector('.quiz-questions');
+            const radioGroups = formElement.querySelectorAll('input[type="radio"]');
+            const questionNames = new Set();
+            radioGroups.forEach(radio => questionNames.add(radio.name));
+
+            let allAnswered = true;
+            questionNames.forEach(name => {
+                if (getRadioValue(name) === null) {
+                    allAnswered = false;
+                }
+            });
+            
+            if (!allAnswered) {
+                const insightElement = document.getElementById(quizPrefix + '-insight');
+                const actionsElement = document.getElementById(quizPrefix + '-actions');
+                const faithTipElement = document.getElementById(quizPrefix + '-faith-tip');
+                
+                insightElement.innerHTML = "❌ <strong>Incomplete:</strong> Please answer all questions to get a customized insight.";
+                actionsElement.innerHTML = '<li>Complete the quiz fully to receive your personalized plan.</li><li>Remember, all your answers are private and anonymous.</li>';
+                faithTipElement.innerHTML = '';
+                
+                document.getElementById(outputId).style.display = 'block';
+                document.getElementById(outputId).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return false;
+            }
+            return true;
+        }
 
         // --- CUSTOM LOGIC FOR EMOTIONAL HEALTH FINDER (EHF) ---
         function generateEmotionalHealthOutput() {
+            if (!validateQuiz('ehf', 'emotionalHealthOutput')) return;
+
             const emotion = getRadioValue('q1_ehf');
             const duration = getRadioValue('q2_ehf');
             const severity = getRadioValue('q3_ehf');
+            const coping = getRadioValue('q4_ehf');
+            const purpose = getRadioValue('q5_ehf');
             const support = getRadioValue('q6_ehf');
 
             let insight = "✅ <strong>Emotional Insight:</strong> ";
             let actions = [];
-            let faithTip = '';
-
-            // 1. Validation Check
-            if (!emotion || !duration || !severity || !support) {
-                insight = "❌ <strong>Incomplete:</strong> Please answer all questions to get a customized insight.";
-                actions = ["Complete the quiz fully to receive your personalized plan.", "Remember, all your answers are private and anonymous."];
-                document.getElementById('ehf-insight').innerHTML = insight;
-                document.getElementById('ehf-actions').innerHTML = actions.map(a => `<li>${a}</li>`).join('');
-                document.getElementById('ehf-faith-tip').innerHTML = ''; 
-                document.getElementById('emotionalHealthOutput').style.display = 'block';
-                document.getElementById('emotionalHealthOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                return;
-            }
+            let faithTip = '📖 Optional Faith Tip: ';
 
             // --- INSIGHT LOGIC ---
-            if (emotion === 'sad' || emotion === 'hopeless') {
-                insight += (duration === 'long_time' || severity === 'severe') ? "You are displaying signs of **moderate to significant depression**. It is crucial to address this." : "You may be experiencing **emotional burnout or sadness**. This is common, but needs attention.";
+            if (severity === 'severe' || duration === 'long_time') {
+                insight += "You are displaying signs of **significant, chronic emotional distress**. Immediate action is required for your well-being.";
+            } else if (emotion === 'sad' || emotion === 'hopeless') {
+                insight += "You are experiencing **emotional burnout or sadness**. This is common, but needs structured, proactive attention.";
             } else if (emotion === 'anxious') {
-                insight += (duration === 'long_time' || severity === 'severe') ? "Your answers suggest signs of **chronic anxiety or high stress levels**. You need structured relaxation and support." : "You are dealing with **acute anxiety**. Focus on grounding and stability exercises.";
+                insight += "Your answers suggest signs of **elevated stress and anxiety levels**. Focus on grounding and stability exercises.";
             } else if (emotion === 'angry' || emotion === 'numb') {
-                insight += "You may be processing **unresolved resentment or trauma** through anger or emotional detachment. Focus on emotional release and safety.";
+                insight += "You may be processing **unresolved issues** through anger or emotional detachment. Focus on safe emotional release.";
             } else {
-                insight += "Your feelings indicate a general state of **overwhelm and low self-worth**. We recommend building foundational mental strength.";
+                insight += "Your feelings indicate a general state of **overwhelm**. We recommend building foundational mental strength.";
             }
 
             // --- ACTION LOGIC ---
-            actions.push("Practice **mindful breathing** or a 5-minute devotion twice daily to recenter.");
+            actions.push("Practice **mindful breathing** (4-7-8 method) for 5 minutes twice daily to regulate your nervous system.");
             
-            if (emotion === 'sad' || emotion === 'hopeless') {
-                actions.push("Start a **Gratitude Journal** (3 things every night) to shift focus.");
-            } else if (emotion === 'anxious') {
-                actions.push("Try a **Body Scan meditation** to reduce physical tension from anxiety.");
-            } else if (emotion === 'angry' || emotion === 'numb') {
-                actions.push("Write a **'Release Letter'** to externalize and process stored emotions.");
+            if (severity === 'severe' || support === 'no') {
+                 actions.push("🛑 **CRITICAL ACTION:** Immediately contact a professional counselor or crisis helpline. See the Pro Help tab for resources.");
+            } else if (support === 'limited') {
+                actions.push("Commit to sharing **one honest feeling** this week with your trusted person to strengthen your support system.");
             }
 
-            if (support === 'no' || severity === 'severe' || duration === 'long_time') {
-                 actions.push("CRITICAL: **Contact a professional therapist or helpline today.** This level of distress requires expert guidance. See the Pro Help tab.");
-            } else if (support === 'limited') {
-                actions.push("Commit to sharing **one honest feeling** this week with your trusted person to strengthen your support.");
-            } else {
-                actions.push("Aim for **30 minutes of light exercise** (walking or stretching) daily, which has powerful mood benefits.");
+            if (purpose === 'no') {
+                actions.push("Define **one small, achievable purpose goal** for the week (e.g., help a neighbor, learn one new skill).");
             }
+
+            if (coping === 'withdraw' || coping === 'distraction') {
+                actions.push("Replace one negative coping behavior with a positive one: **30 minutes of light exercise** (walking or stretching).");
+            } else { // socialize, low severity
+                actions.push("Maintain connection: Reach out to a friend this week with a specific intention to listen, not just talk.");
+            }
+
 
             // --- FAITH TIP ---
             if (emotion === 'anxious') {
-                faithTip = '📖 Optional Faith Tip: "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God." – Philippians 4:6';
-            } else if (emotion === 'hopeless') {
-                faithTip = '📖 Optional Faith Tip: "For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future." – Jeremiah 29:11';
+                faithTip += '"Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God." – Philippians 4:6';
+            } else if (emotion === 'hopeless' || purpose === 'no') {
+                faithTip += '"For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future." – Jeremiah 29:11';
             } else {
-                faithTip = '📖 Optional Faith Tip: “Cast all your care upon Him, for He cares for you.” – 1 Peter 5:7';
+                faithTip += '“Cast all your care upon Him, for He cares for you.” – 1 Peter 5:7';
             }
 
             // 2. Update the HTML output
@@ -782,6 +806,8 @@
 
         // --- CUSTOM LOGIC FOR TRAUMA RECOVERY (TR) ---
         function generateTraumaRecoveryOutput() {
+            if (!validateQuiz('tr', 'traumaRecoveryOutput')) return;
+
             const re_experience = getRadioValue('q1_tr');
             const hyper_vigilance = getRadioValue('q2_tr');
             const avoidance = getRadioValue('q3_tr');
@@ -791,21 +817,9 @@
 
             let insight = "✅ <strong>Identified Need:</strong> ";
             let actions = [];
-            let faithTip = '';
+            let faithTip = '📖 Optional Faith Tip: ';
 
-            // 1. Validation Check
-            if (!re_experience || !hyper_vigilance || !avoidance || !shame || !therapy_status || !relationships) {
-                insight = "❌ <strong>Incomplete:</strong> Please answer all questions to get a customized recovery plan.";
-                actions = ["Complete the quiz fully to receive your personalized plan.", "If you are in immediate distress, please see the Pro Help tab."];
-                document.getElementById('tr-insight').innerHTML = insight;
-                document.getElementById('tr-actions').innerHTML = actions.map(a => `<li>${a}</li>`).join('');
-                document.getElementById('tr-faith-tip').innerHTML = '';
-                document.getElementById('traumaRecoveryOutput').style.display = 'block';
-                document.getElementById('traumaRecoveryOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                return;
-            }
-
-            // --- INSIGHT LOGIC ---
+            // --- SEVERITY COUNT ---
             let high_risk_count = 0;
             if (re_experience === 'yes_frequent') high_risk_count++;
             if (hyper_vigilance === 'yes') high_risk_count++;
@@ -813,35 +827,45 @@
             if (shame === 'yes') high_risk_count++;
             if (relationships === 'yes') high_risk_count++;
 
+            // --- INSIGHT LOGIC ---
             if (high_risk_count >= 3 && therapy_status !== 'yes_tried') {
-                insight += "You are experiencing **significant, untreated trauma symptoms**. We strongly recommend starting professional, trauma-informed therapy immediately.";
+                insight += "You are experiencing **significant, untreated trauma symptoms**. We strongly recommend starting professional, trauma-informed therapy immediately for stabilization.";
             } else if (high_risk_count >= 1 && therapy_status === 'yes_need') {
                 insight += "You have **moderate trauma symptoms** and recognize the need for help. Taking the first step toward counseling is essential now.";
             } else if (high_risk_count >= 1 && therapy_status === 'yes_tried') {
-                 insight += "You are actively **engaging in healing work**, which is excellent. We recommend deepening your current practice.";
+                 insight += "You are actively **engaging in healing work**, which is excellent. We recommend deepening your current practice through specific self-care and resource study.";
             } else {
-                insight += "You are showing signs of **successful healing and resilience**. Focus on maintenance and growth.";
+                insight += "You are showing signs of **successful healing and resilience**. Focus on maintenance, purpose, and relationship growth.";
             }
 
             // --- ACTION LOGIC ---
-            if (high_risk_count >= 3 || therapy_status === 'yes_need') {
+            
+            if (high_risk_count >= 3 || therapy_status === 'yes_need' || therapy_status === 'no_prefer_self') {
                 actions.push("URGENT: Visit the **Professional Help** tab now. Look for counselors specialized in **EMDR, CBT, or Trauma-Focused therapy**.");
-                actions.push("Practice **Grounding Techniques** (5-4-3-2-1 method) daily to manage re-experiencing symptoms.");
             } else {
-                actions.push("Start with **gentle forgiveness exercises**—release the burden that isn't yours to carry.");
-                actions.push("Identify **three safe people** you can be vulnerable with this month.");
+                 actions.push("Start with **gentle forgiveness exercises**—release the burden that isn't yours to carry, focusing on self-compassion.");
+            }
+
+            if (re_experience === 'yes_frequent' || hyper_vigilance === 'yes') {
+                actions.push("Practice **Grounding Techniques** (5-4-3-2-1 method) daily, especially before bed or during heightened stress.");
             }
 
             if (shame === 'yes') {
-                actions.push("Challenge negative self-talk by writing a **'Truth Statement'** about your inherent worth.");
+                actions.push("Challenge negative self-talk by writing a **'Truth Statement'**—a factual list of why you are not responsible for the abuse/pain.");
+            } else if (relationships === 'yes') {
+                actions.push("Work on **Rebuilding Trust**: Start with small, low-risk sharing with one trusted person to practice vulnerability.");
             }
+
             if (avoidance === 'yes_often') {
-                actions.push("Find one small, safe activity you avoid and gently challenge yourself to re-engage with it.");
+                actions.push("Find one small, safe activity (a new hobby or a local coffee shop) you avoid and gently challenge yourself to re-engage with it.");
             }
-            actions.push("📚 *Free Resource:* “Healing from Emotional Trauma – PDF Guide.”");
+            
+            actions.push("📚 *Free Resource:* Download the “Healing from Emotional Trauma – PDF Guide” for foundational steps.");
 
             // --- FAITH TIP ---
-            faithTip = '📖 Optional Faith Tip: "He heals the brokenhearted and binds up their wounds." – Psalm 147:3';
+            faithTip += (relationships === 'yes') ? 
+                '"He will command his angels concerning you to guard you in all your ways." – Psalm 91:11 (Focus on finding divine safety.)' : 
+                '"He heals the brokenhearted and binds up their wounds." – Psalm 147:3';
 
             // 2. Update the HTML output
             document.getElementById('tr-insight').innerHTML = insight;
@@ -856,6 +880,8 @@
 
         // --- CUSTOM LOGIC FOR MENTAL STRENGTH BUILDER (MSB) ---
         function generateMentalStrengthOutput() {
+            if (!validateQuiz('msb', 'mentalStrengthOutput')) return;
+
             const gratitude = getRadioValue('q1_msb');
             const resilience = getRadioValue('q2_msb');
             const goals = getRadioValue('q3_msb');
@@ -865,63 +891,64 @@
 
             let insight = "✅ <strong>Recommendation:</strong> ";
             let actions = [];
-            let faithTip = '';
+            let faithTip = '📖 Optional Faith Tip: ';
 
-            // 1. Validation Check
-            if (!gratitude || !resilience || !goals || !mindfulness || !boundaries || !joy) {
-                insight = "❌ <strong>Incomplete:</strong> Please answer all questions to get a customized growth plan.";
-                actions = ["Complete the quiz fully to receive your personalized plan.", "Building strength requires honest self-assessment."];
-                document.getElementById('msb-insight').innerHTML = insight;
-                document.getElementById('msb-actions').innerHTML = actions.map(a => `<li>${a}</li>`).join('');
-                document.getElementById('msb-faith-tip').innerHTML = '';
-                document.getElementById('mentalStrengthOutput').style.display = 'block';
-                document.getElementById('mentalStrengthOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                return;
-            }
-
-            // --- INSIGHT LOGIC ---
+            // --- SEVERITY COUNT ---
             let low_score_count = 0;
-            if (gratitude === 'never') low_score_count++;
-            if (resilience === 'self_blame') low_score_count++;
-            if (goals === 'no') low_score_count++;
-            if (mindfulness === 'no') low_score_count++;
-            if (boundaries === 'always_yes') low_score_count++;
-            if (joy === 'never') low_score_count++;
-
-            if (low_score_count >= 3) {
-                insight += "Focus on **Foundational Mindset Shifts**. We need to build small, consistent habits to regain control and direction.";
-            } else if (low_score_count >= 1) {
-                insight += "You have a **good foundation**, but need to strengthen key areas like **boundaries and planning** for sustainable growth.";
+            if (gratitude !== 'daily') low_score_count++;
+            if (resilience !== 'resilient') low_score_count++;
+            if (goals !== 'yes_consistent') low_score_count++;
+            if (mindfulness !== 'daily') low_score_count++;
+            if (boundaries !== 'strong') low_score_count++;
+            if (joy !== 'yes_regularly') low_score_count++;
+            
+            // --- INSIGHT LOGIC ---
+            if (low_score_count >= 4) {
+                insight += "Focus on **Foundational Mindset Shifts**. You need to build small, consistent habits to regain control and direction. Start with 1-2 key areas only.";
+            } else if (low_score_count >= 2) {
+                insight += "You have a **good foundation**, but need to strengthen key areas like **boundaries, resilience, or consistency** for sustainable growth.";
             } else {
-                insight += "You have a **strong mental and spiritual foundation**. Your focus should be on maintenance and reaching your highest potential.";
+                insight += "You have a **strong mental and spiritual foundation**. Your focus should be on maintenance, deepening your habits, and serving others.";
             }
 
             // --- ACTION LOGIC ---
-            if (gratitude !== 'daily') {
-                actions.push("Implement the **3-Minute Gratitude Rule** (3 things you are thankful for every morning).");
-            }
-            if (resilience !== 'resilient') {
-                actions.push("Practice **Cognitive Reframing**: When setbacks occur, write down the negative thought and then write two factual, positive reframes.");
-            }
-            if (goals === 'no' || goals === 'sometimes') {
-                actions.push("Establish a **Sunday Night Planning Routine**: Define one spiritual, one physical, and one professional goal for the week.");
-            }
-            if (boundaries === 'struggle' || boundaries === 'always_yes') {
-                actions.push("Identify **one non-essential request** you will say 'No' to this week. Start small to build your boundary muscle.");
-            }
-            if (joy === 'rarely' || joy === 'never') {
-                actions.push("Schedule a **'Joy Block'** of 15 minutes this week for an old hobby or creative outlet.");
+            
+            if (low_score_count >= 4 || gratitude === 'never') {
+                actions.push("Implement the **3-Minute Gratitude Rule** (3 things you are thankful for) every morning and night without fail.");
             }
             
-            actions.push("🎧 *Music Therapy:* Listen to a Calm Piano or Worship music playlist during focus time.");
+            if (mindfulness !== 'daily') {
+                actions.push("Start a **Daily Spiritual Check-in**: 10 minutes of dedicated prayer, reflection, or quiet nature time.");
+            }
+            
+            if (resilience === 'self_blame' || resilience === 'discouraged') {
+                actions.push("Practice **Cognitive Reframing**: When setbacks occur, replace the self-critical thought with a neutral, factual observation.");
+            }
+            
+            if (boundaries === 'struggle' || boundaries === 'always_yes') {
+                actions.push("Establish a 'Wait-and-See' Rule: Never say yes immediately. Reply: **'Let me check my schedule and get back to you.'**");
+            }
+
+            if (goals === 'no' || goals === 'sometimes') {
+                actions.push("Establish a **Sunday Night Planning Routine**: Define one spiritual and one self-care goal for the upcoming week.");
+            }
+            
+            if (joy === 'rarely' || joy === 'never') {
+                actions.push("Schedule a **'Joy Block'** of 30 minutes this week for an old hobby or creative outlet to refill your tank.");
+            }
+            
+            actions.push("🎧 *Music Therapy:* Listen to a Calm Piano or Worship music playlist during focus time to maintain peace.");
 
 
             // --- FAITH TIP ---
-            if (low_score_count >= 3) {
-                faithTip = '📖 Optional Faith Tip: "Finally, brothers and sisters, whatever is true, whatever is noble, whatever is right, whatever is pure, whatever is lovely, whatever is admirable—if anything is excellent or praiseworthy—think about such things." – Philippians 4:8';
+            if (low_score_count >= 4) {
+                faithTip += '"Finally, whatever is true, whatever is noble, whatever is right, whatever is pure... think about such things." – Philippians 4:8 (Your thoughts need intentional correction.)';
+            } else if (boundaries !== 'strong') {
+                faithTip += '"The Lord will fight for you; you need only to be still." – Exodus 14:14 (Know when to stand firm and rely on God’s boundary.)';
             } else {
-                faithTip = '📖 Optional Faith Tip: "The joy of the Lord is your strength." – Nehemiah 8:10';
+                faithTip += '"The joy of the Lord is your strength." – Nehemiah 8:10';
             }
+
 
             // 2. Update the HTML output
             document.getElementById('msb-insight').innerHTML = insight;
